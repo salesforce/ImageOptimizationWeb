@@ -1,0 +1,119 @@
+html{
+font-family:BrandonText-Light, "Avenir Next", "Helvetica Neue", Arial, Geneva, sans-serif;
+font-size:12px;
+background:#006BB6;
+background:#006BB6 -ms-radial-gradient(center top, ellipse farthest-corner, #83b5dd 0%, #006bb6 100%) no-repeat;
+background:#006BB6 -moz-radial-gradient(center top, ellipse farthest-corner, #83b5dd 0%, #006bb6 100%) no-repeat;
+background:#006BB6 -o-radial-gradient(center top, ellipse farthest-corner, #83b5dd 0%, #006bb6 100%) no-repeat;
+background:#006BB6 -webkit-gradient(radial, center top, 0, center top, 560, color-stop(0, #83b5dd), color-stop(1, #006bb6)) no-repeat;
+background:#006BB6 -webkit-radial-gradient(center top, ellipse farthest-corner, #83b5dd 0%, #006bb6 100%) no-repeat;
+background:#006BB6 radial-gradient(ellipse farthest-corner at center top, #83b5dd 0%, #006bb6 100%) no-repeat;
+min-height:100%
+}
+
+form{
+width:800px;
+margin-left:auto;
+margin-right:auto
+}
+
+#content{
+background:#fff;
+border-radius:0 0 .5em .5em;
+padding:1em
+}
+
+h1{
+background:#ffd600;
+border-radius:.5em .5em 0 0;
+padding:.3em;
+margin-bottom:0;
+text-transform:uppercase;
+text-shadow:0 1px 2px #ffe1ba
+}
+
+#filedrag{
+display:none;
+font-weight:700;
+text-align:center;
+padding:1em 0;
+margin:1em 0;
+color:#555;
+cursor:pointer;
+height:300px
+}
+
+#filedrag.hover{
+color:red;
+border-style: solid;
+box-shadow:inset 0 3px 4px #888;
+background:#83b8aa url(image_120.png) center center no-repeat;
+opacity:.5
+}
+
+#slow{
+padding-top:.5em;
+font-weight:100
+}
+
+#drop{
+font-weight:700;
+font-size:2em
+}
+
+fieldset,#filedrag{
+background:#fdf5e6;
+border:1px solid #ccc
+}
+
+legend{
+background:#fff
+}
+
+.label,label{
+width:15em;
+display:inline-block
+}
+
+input[type=checkbox]{
+vertical-align:middle
+}
+
+table{
+width:100%;
+text-align:left;
+border-collapse:collapse;
+table-layout:fixed
+}
+
+table th{
+font-size:14px;
+font-weight:400;
+padding:12px 5px;
+color:#039
+}
+
+table td{
+padding:10px 5px;
+color:#669;
+border-top:1px solid #e8edff;
+overflow:hidden;
+text-overflow:ellipsis
+}
+
+table tr:hover td{
+color:#339;
+background:#eff2ff
+}
+
+.unsupported{
+text-decoration:line-through
+}
+
+#sfdc{
+position:absolute;
+top:0;
+right:0;
+width:153px;
+height:93px
+}

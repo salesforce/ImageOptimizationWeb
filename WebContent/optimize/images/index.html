@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Image Optimization</title>
+<link href="c.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<form id="upload" action="#" method="POST" enctype="multipart/form-data">
+    <h1>Image Optimization <span style="text-transform:none;font-size:.8em;background:#B83564;color:#fff;padding:.25em;border-radius:.5em;vertical-align:middle">beta</span></h1>
+    <div id="content">
+    	<fieldset>
+    		<legend>Options</legend>
+    		<div class="label">Include file type conversion</div>
+			<label for="conversion">
+				<select id="conversion" name="conversion">
+				    <option value="NONE">No</option>
+				    <option value="ALL">Yes</option>
+				    <option value="IE6SAFE">IE6 Safe</option>
+				</select>
+			</label>
+			<div>
+				<div class="label">Generate Additional Version:</div><input type="checkbox" id="webp" name="webp"/><label for="webp">WebP</label>
+			</div>
+		</fieldset>
+		<div id="filedrag" onclick="document.getElementById('fileselect').click()">
+		    <input style="display:none" type="file" id="fileselect" name="fileselect[]" multiple="multiple" accept="image/*"/>
+		    <span id="drop">Drop files here</span> or click to select file
+		    <div id="slow">May be slow because it squeezes every last byte out of the file(s).</div>
+		</div>
+		<div id="submitbutton">
+			<button type="submit">Upload Files</button>
+		</div>
+		<div id="files"></div>
+	</div>
+</form>
+<img src="https://www.salesforce.com/common/assets/img/logo-new.png" alt="Salesforce.com" id="sfdc" />
+<script src="j.js"></script>
+</body>
+</html>
