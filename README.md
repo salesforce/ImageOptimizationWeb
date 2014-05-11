@@ -30,4 +30,4 @@ You need to have JAVA JDK 7 on the machine for comipling and Maven 3.  Then run 
 
 ## How to use ##
 
-To access the web app run `http://localhost/optimize/images/` from a modern browser to launch the web interface.  Currently it has only been tested on IE 10+ and Chrome.  Please file bugs if you find any issues with other browsers.
+To access the web app run `http://localhost/optimize/images/` from a modern browser to launch the web interface.  Currently it has only been tested on IE 10+ and Chrome.  Please file [bugs](https://github.com/forcedotcom/ImageOptimizationWeb/issues) if you find any issues with other browsers.
