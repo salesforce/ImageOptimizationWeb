@@ -110,10 +110,6 @@ background:#eff2ff
 text-decoration:line-through
 }
 
-#sfdc{
-position:absolute;
-top:0;
-right:0;
-width:153px;
-height:93px
+#tou{
+display:block;text-align:center
 }
