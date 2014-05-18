@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
@@ -121,6 +122,15 @@ public final class ImageFileController {
 		return simpleResults;
 	}
 	
+	private boolean containsExtension(final String extension) {
+		for(final String supportedExtension : IImageOptimizationService.SUPPORTED_FILE_EXTENSIONS) {
+			if(supportedExtension.equals(extension)) {
+				return true;
+			}
+		}
+		return IImageOptimizationService.WEBP_EXTENSION.equalsIgnoreCase(extension);
+	}
+	
 	private File getFile(final long id, final String fileName) throws OptimizedFileNotFoundException {
 		final File file = new File(new StringBuilder(imageOptimizationService.getFinalResultsDirectory()).append(tmpDirPath).append('/').append(id).append('/').append(fileName).toString());
 		
@@ -137,6 +147,11 @@ public final class ImageFileController {
 	@RequestMapping(value="get/{id}/{fileName:.*}", method=RequestMethod.GET)
 	@ResponseBody
 	protected FileSystemResource download(@PathVariable final long id, @PathVariable final String fileName, final HttpServletResponse response) throws Exception {
+		
+		if(!containsExtension(FilenameUtils.getExtension(fileName))) {
+			throw new OptimizedFileNotFoundException(fileName + " does not exist");
+		}
+		
 		response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 		return new FileSystemResource(getFile(id, fileName));
 	}
