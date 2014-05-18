@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.salesforce.perfeng.imageoptimization.web.domain.FileMeta;
 import com.salesforce.perfeng.imageoptimization.web.domain.SimpleOptimizationResult;
 import com.salesforce.perfeng.uiperf.imageoptimization.dto.OptimizationResult;
 import com.salesforce.perfeng.uiperf.imageoptimization.service.IImageOptimizationService;
@@ -53,7 +52,7 @@ public final class ImageFileController {
 		final File tmpDir = File.createTempFile(ImageFileController.class.getName(), "");
 		tmpDir.delete();
 		tmpDir.mkdir();
-		tmpDirPath = tmpDir.getAbsolutePath() + "/";
+		tmpDirPath = tmpDir.getAbsolutePath() + File.separator;
 	}
 
 	@RequestMapping(value="upload", produces="application/json", method=RequestMethod.POST)
@@ -63,55 +62,57 @@ public final class ImageFileController {
 		final List<File> files = new ArrayList<File>();
 
 		//1. build an iterator
-		final Iterator<String> itr =  request.getFileNames();
+		final Iterator<String> itr = request.getFileNames();
 		MultipartFile mpf;
 
-		FileMeta fileMeta;
-
-		Map<String, Long> idMap = new HashMap<String, Long>();
-
+		final Map<String, Long> idMap = new HashMap<String, Long>();
+		File uploadedFile;
+		
+		long id = 0;
+		String imageDirectoryPath = null;
+		String originalFileName;
+		
 		//2. get each file
 		while(itr.hasNext()){
 
 			//2.1 get next MultipartFile
 			mpf = request.getFile(itr.next());
 
-			//2.3 create new fileMeta
-			fileMeta = new FileMeta();
-			fileMeta.setFileName(mpf.getOriginalFilename());
-			fileMeta.setFileSize(mpf.getSize() / 1024 + " Kb");
-			fileMeta.setFileType(mpf.getContentType());
-
 			try {
-				fileMeta.setBytes(mpf.getBytes());
-
-				final long id = System.nanoTime();
 				
-				new File(tmpDirPath + id + "/").mkdir();
-				// copy file to local disk (make sure the path "e.g. D:/temp/files" exists)            
-				FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream(tmpDirPath + id + "/" + mpf.getOriginalFilename()));
-				//2.4 add to files
-				files.add(new File(tmpDirPath + id + "/" + mpf.getOriginalFilename()));
+				if(imageDirectoryPath == null) {
+					synchronized (ImageFileController.class) {
+						id = System.nanoTime();
+						imageDirectoryPath = new StringBuilder(tmpDirPath).append(id).append(File.separatorChar).toString();
+						new File(imageDirectoryPath).mkdir();
+					}
+				}
+				//2.2 copy file to local disk (make sure the path "e.g. c:/temp/files" exists)
+				originalFileName = FilenameUtils.getName(mpf.getOriginalFilename());
+				uploadedFile = new File(imageDirectoryPath + originalFileName);
+				FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream(uploadedFile));
+				//2.3 add to files
+				files.add(uploadedFile);
 				
-				idMap.put(mpf.getOriginalFilename(), Long.valueOf(id));
+				idMap.put(originalFileName, Long.valueOf(id));
 			} catch (final IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		}
-		// result will be like this
-		// [{"fileName":"app_engine-85x77.png","fileSize":"8 Kb","fileType":"image/png"},...]
 
-		final Map<String, List<SimpleOptimizationResult>>  results = convertOptimizationResultsToSimpleOptimizationResultsMap(imageOptimizationService.optimizeAllImages(conversion, generateWebp, files), idMap);
+		//3. optimize image(s)
+		final Map<String, List<SimpleOptimizationResult>> results = convertOptimizationResultsToSimpleOptimizationResultsMap(imageOptimizationService.optimizeAllImages(conversion, generateWebp, files), idMap);
 
 		return results;
 	}
 
 	private Map<String, List<SimpleOptimizationResult>> convertOptimizationResultsToSimpleOptimizationResultsMap(final List<OptimizationResult<Object>> results, final Map<String, Long> idMap) {
 		final Map<String, List<SimpleOptimizationResult>> simpleResults = new HashMap<>(results.size());
+		List<SimpleOptimizationResult> resultFileList;
 		for(final OptimizationResult<?> result : results) {
 			if(result != null) {
-				List<SimpleOptimizationResult> resultFileList = simpleResults.get(result.getOriginalFile().getName());
+				resultFileList = simpleResults.get(result.getOriginalFile().getName());
 				if(resultFileList == null) {
 					resultFileList = new ArrayList<>(2);
 					simpleResults.put(result.getOriginalFile().getName(), resultFileList);
@@ -132,7 +133,7 @@ public final class ImageFileController {
 	}
 	
 	private File getFile(final long id, final String fileName) throws OptimizedFileNotFoundException {
-		final File file = new File(new StringBuilder(imageOptimizationService.getFinalResultsDirectory()).append(tmpDirPath).append('/').append(id).append('/').append(fileName).toString());
+		final File file = new File(new StringBuilder(imageOptimizationService.getFinalResultsDirectory()).append(tmpDirPath).append(File.separatorChar).append(id).append(File.separatorChar).append(fileName).toString());
 		
 		if(!file.exists()) {
 			throw new OptimizedFileNotFoundException(fileName + " does not exist");

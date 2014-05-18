@@ -130,23 +130,25 @@ function parseResults (data, key) {
 
 //file selection
 (function() {
-	var key = "a";
+	var key = 1;
 	window.FileSelectHandler = function(e) {
 		var data = new FormData();
 		
 		// cancel event and hover styling
 		fileDragHover(e);
 		// fetch FileList object
-		var files = e.target.files || e.dataTransfer.files;
+		var files = (e.target.files || e.dataTransfer.files),
+			i = 0,
+			f;
 		// process all File objects
-		for (var i = 0, f; f = files[i]; i++) {
-			f = parseFile(f, key);
+		for (; f = files[i]; i++) {
+			f = parseFile(f, "a" + key);
 			if(f) {
 				data.append("file[" + i + "]", f);
 			}
 		}
-		new FileUpload(data, key);
-		key = String.fromCharCode(key.charCodeAt() + 1);
+		new FileUpload(data, "a" + key);
+		key++;
 	};
 })();
 
