@@ -5,10 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeoutException;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,6 +34,7 @@ import com.salesforce.perfeng.imageoptimization.web.domain.SimpleOptimizationRes
 import com.salesforce.perfeng.uiperf.imageoptimization.dto.OptimizationResult;
 import com.salesforce.perfeng.uiperf.imageoptimization.service.IImageOptimizationService;
 import com.salesforce.perfeng.uiperf.imageoptimization.service.IImageOptimizationService.FileTypeConversion;
+import com.salesforce.perfeng.uiperf.imageoptimization.utils.ImageFileOptimizationException;
 
 @Controller
 public final class ImageFileController {
@@ -57,7 +61,7 @@ public final class ImageFileController {
 
 	@RequestMapping(value="upload", produces="application/json", method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.OK)
-	protected @ResponseBody Map<String, List<SimpleOptimizationResult>> upload(@RequestParam("conversion") final FileTypeConversion conversion, @RequestParam(value="webp", defaultValue="false") final boolean generateWebp, final MultipartHttpServletRequest request, final HttpServletResponse response) throws Exception {
+	protected @ResponseBody Map<String, List<SimpleOptimizationResult>> upload(@RequestParam("conversion") final FileTypeConversion conversion, @RequestParam(value="webp", defaultValue="false") final boolean generateWebp, final MultipartHttpServletRequest request, final HttpServletResponse response) throws ImageFileOptimizationException {
 
 		final List<File> files = new ArrayList<File>();
 
@@ -101,10 +105,14 @@ public final class ImageFileController {
 			}
 		}
 
-		//3. optimize image(s)
-		final Map<String, List<SimpleOptimizationResult>> results = convertOptimizationResultsToSimpleOptimizationResultsMap(imageOptimizationService.optimizeAllImages(conversion, generateWebp, files), idMap);
-
-		return results;
+		try {
+			//3. optimize image(s)
+			return convertOptimizationResultsToSimpleOptimizationResultsMap(imageOptimizationService.optimizeAllImages(conversion, generateWebp, files), idMap);
+		} catch(final TimeoutException te) {
+			return convertTimeoutToSimpleOptimizationResultsMap(idMap);
+		}
+			
+		//return results;
 	}
 
 	private Map<String, List<SimpleOptimizationResult>> convertOptimizationResultsToSimpleOptimizationResultsMap(final List<OptimizationResult<Object>> results, final Map<String, Long> idMap) {
@@ -119,6 +127,14 @@ public final class ImageFileController {
 				}
 				resultFileList.add(new SimpleOptimizationResult(result.getOptimizedFileSize(), result.getOriginalFileSize() - result.getOptimizedFileSize(), idMap.get(result.getOriginalFile().getName()).toString(), result.getOptimizedFile().getName()));
 			}
+		}
+		return simpleResults;
+	}
+	
+	private Map<String, List<SimpleOptimizationResult>> convertTimeoutToSimpleOptimizationResultsMap(final Map<String, Long> idMap) {
+		final Map<String, List<SimpleOptimizationResult>> simpleResults = new HashMap<>(idMap.size());
+		for(final String imageName: idMap.keySet()) {
+			simpleResults.put(imageName, Collections.singletonList(new SimpleOptimizationResult("Timed out trying to optimize image(s). Submit less images at the same time or use less complex image(s).")));
 		}
 		return simpleResults;
 	}

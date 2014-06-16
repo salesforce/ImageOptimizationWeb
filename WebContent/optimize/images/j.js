@@ -111,9 +111,16 @@ function parseResults (data, key) {
 			resultI;
 		if(result && result.length) {
 			resultI = result[0];
-			row.cells[3].innerHTML = addCommas(resultI.size);
-			row.cells[4].innerHTML = addCommas(resultI.savings);
-			row.cells[5].innerHTML = '<a href="do/get/' + resultI.id + "/" + resultI.file + '">' + resultI.file + "</a>";
+			if(resultI.errorMsg) {
+				row.deleteCell(4);
+				row.deleteCell(4);
+				row.cells[3].colSpan = 3;
+				row.cells[3].innerHTML = resultI.errorMsg;
+			} else {
+				row.cells[3].innerHTML = addCommas(resultI.size);
+				row.cells[4].innerHTML = addCommas(resultI.savings);
+				row.cells[5].innerHTML = '<a href="do/get/' + resultI.id + "/" + resultI.file + '">' + resultI.file + "</a>";
+			}
 			if(resultI = result[1]) {
 				row.cells[0].rowSpan = row.cells[1].rowSpan = row.cells[2].rowSpan = 2;
 				row = row.parentNode.insertRow(row.rowIndex);

@@ -30,6 +30,7 @@
 	
 	<bean id="imageOptimizationService" class="com.salesforce.perfeng.uiperf.imageoptimization.service.ImageOptimizationService" factory-method="createInstance" destroy-method="destroy">
 		<constructor-arg><value>/home/eperret/git/ImageOptimization/lib/binary/linux/</value></constructor-arg>
+		<constructor-arg type="int"><value>60</value></constructor-arg>
 	</bean>
 	
     <task:annotation-driven scheduler="myScheduler"/>
