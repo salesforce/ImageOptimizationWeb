@@ -23,7 +23,7 @@ NOTE: Currently this code only works on Linux due to [binary dependancies](https
 The file system path of the image optimization binaries needs to set in the the [sping-servlet.xml](https://git.soma.salesforce.com/perfeng/ImageOptimizationWeb/blob/master/WebContent/WEB-INF/spring-servlet.xml) file as the constructor argument for the "imageOptimizationService" bean.
 
     <bean id="imageOptimizationService" class="com.salesforce.perfeng.uiperf.imageoptimization.service.ImageOptimizationService" factory-method="createInstance" destroy-method="destroy">
-        <constructor-arg><value>~/git/ImageOptimization/lib/binary/linux/</value></constructor-arg>
+        <constructor-arg value="~/git/ImageOptimization/lib/binary/linux/"/>
     </bean>
 
 You need to have JAVA JDK 7 on the machine for comipling and Maven 3.  Then run `mvn install` and it will packpage up all of the content, with the exception of the binary files, and create a WAR file which is ready to be deployed to your webserver.
