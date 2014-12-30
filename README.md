@@ -18,9 +18,9 @@ When optimizaing or converting an image, depending on the size it will take whil
 
 ## Installation ##
 
-NOTE: Currently this code only works on Linux due to [binary dependancies](https://git.soma.salesforce.com/perfeng/ImageOptimization/tree/master/lib/binary/linux) in the ImageOptimization project this code depends on.
+NOTE: Currently this code has only been tested on Linux due to [binary dependancies](https://git.soma.salesforce.com/perfeng/ImageOptimization/tree/master/lib/binary/linux) in the ImageOptimization project this code depends on.
 
-See the Image Optimization [installation instructions]() for the steps needed to download and compile the binaries.
+See the Image Optimization [installation instructions](https://github.com/forcedotcom/ImageOptimization/blob/master/README.md#compilation) for the steps needed to download and compile the binaries.
 
 The file system path of the image optimization binaries needs to set in the the [sping-servlet.xml](https://git.soma.salesforce.com/perfeng/ImageOptimizationWeb/blob/master/WebContent/WEB-INF/spring-servlet.xml) file as the constructor argument for the "imageOptimizationService" bean.
 
@@ -28,7 +28,7 @@ The file system path of the image optimization binaries needs to set in the the 
         <constructor-arg value="~/git/ImageOptimization/lib/binary/linux/"/>
     </bean>
 
-You need to have JAVA JDK 7 on the machine for comipling and Maven 3.  Then run `mvn install` and it will packpage up all of the content, with the exception of the binary files, and create a WAR file which is ready to be deployed to your webserver.
+You need to have JAVA JDK 7 on the machine for compiling and Maven 3. Then run `mvn install` and it will packpage up all of the content, with the exception of the binary files, and create a WAR file which is ready to be deployed to your webserver.
 
 ## How to use ##
 
