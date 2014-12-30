@@ -20,6 +20,8 @@ When optimizaing or converting an image, depending on the size it will take whil
 
 NOTE: Currently this code only works on Linux due to [binary dependancies](https://git.soma.salesforce.com/perfeng/ImageOptimization/tree/master/lib/binary/linux) in the ImageOptimization project this code depends on.
 
+See the Image Optimization [installation instructions]() for the steps needed to download and compile the binaries.
+
 The file system path of the image optimization binaries needs to set in the the [sping-servlet.xml](https://git.soma.salesforce.com/perfeng/ImageOptimizationWeb/blob/master/WebContent/WEB-INF/spring-servlet.xml) file as the constructor argument for the "imageOptimizationService" bean.
 
     <bean id="imageOptimizationService" class="com.salesforce.perfeng.uiperf.imageoptimization.service.ImageOptimizationService" factory-method="createInstance" destroy-method="destroy">
