@@ -16,6 +16,12 @@ import org.springframework.stereotype.Service;
 
 import com.salesforce.perfeng.imageoptimization.web.controller.ImageFileController;
 
+/**
+ * Service used to delete optimized files from the temp storage if they are 
+ * older than 2 hours.
+ * 
+ * @author eperret (Eric Perret)
+ */
 @Service
 public class DeleteOldFiles implements ApplicationContextAware, DisposableBean {
 	
@@ -23,6 +29,9 @@ public class DeleteOldFiles implements ApplicationContextAware, DisposableBean {
 
 	private File finalResultsDirectory;
 	
+	/**
+	 * This method is executed every 1 hour to delete the old files.
+	 */
 	@Scheduled(fixedDelay = 1200000)
 	public void process() {
 		
@@ -46,11 +55,27 @@ public class DeleteOldFiles implements ApplicationContextAware, DisposableBean {
 		logger.debug("End DeleteOldFiles with {}", finalResultsDirectory);
 	}
 	
+	/**
+	 * Used to get and store a reference to the root image directory from 
+	 * {@link ImageFileController#getRootImageDirectory()}.
+	 * 
+	 * @param applicationContext the {@link ApplicationContext} object to be 
+	 *                           used by this object
+	 * @see ApplicationContextAware#setApplicationContext(ApplicationContext)
+	 */
 	@Override
     public void setApplicationContext(final ApplicationContext applicationContext) {
 		finalResultsDirectory = new File(((ImageFileController)applicationContext.getBean("imageFileController")).getRootImageDirectory());
     }
 
+	/**
+	 * When the application is unloaded or restarted this method will be called 
+	 * to delete the directory where all of the optimized images live. This is 
+	 * done to cleanup and because the references to the images will be lost 
+	 * from memory when it is restarted or removed.
+	 * 
+	 * @see org.springframework.beans.factory.DisposableBean#destroy()
+	 */
 	@Override
 	public void destroy() throws Exception {
 		try {
@@ -58,6 +83,6 @@ public class DeleteOldFiles implements ApplicationContextAware, DisposableBean {
 		} catch (final Exception e) {
 			logger.error("Error deleting " + finalResultsDirectory, e);
 		}
-		logger.debug("All files deleted from {} .", finalResultsDirectory);
+		logger.debug("All files deleted from \"{}\".", finalResultsDirectory);
 	}
 }
