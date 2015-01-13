@@ -4,6 +4,11 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * DTO for files being uploaded.
+ * 
+ * @author eperret (Eric Perret)
+ */
 public class FileUploadForm {
 	private List<MultipartFile> files;
 
@@ -20,5 +25,4 @@ public class FileUploadForm {
 	public final void setFiles(List<MultipartFile> files) {
 		this.files = files;
 	}
-	
 }

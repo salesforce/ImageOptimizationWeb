@@ -1,5 +1,13 @@
 package com.salesforce.perfeng.imageoptimization.web.domain;
 
+import org.apache.http.annotation.Immutable;
+
+/**
+ * Holds the results of optimizing an image.
+ * 
+ * @author eperret (Eric perret)
+ */
+@Immutable
 public class SimpleOptimizationResult {
 	private final long size;
 	private final long savings;

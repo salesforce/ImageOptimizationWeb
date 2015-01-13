@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeoutException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,8 +33,12 @@ import com.salesforce.perfeng.imageoptimization.web.domain.SimpleOptimizationRes
 import com.salesforce.perfeng.uiperf.imageoptimization.dto.OptimizationResult;
 import com.salesforce.perfeng.uiperf.imageoptimization.service.IImageOptimizationService;
 import com.salesforce.perfeng.uiperf.imageoptimization.service.IImageOptimizationService.FileTypeConversion;
-import com.salesforce.perfeng.uiperf.imageoptimization.utils.ImageFileOptimizationException;
 
+/**
+ * Main controller for handling the optimization of images
+ * 
+ * @author eperret (Eric Perret)
+ */
 @Controller
 public final class ImageFileController {
 
@@ -59,9 +62,23 @@ public final class ImageFileController {
 		tmpDirPath = tmpDir.getAbsolutePath() + File.separator;
 	}
 
+	/**
+	 * Externally exposed method used to handle request to optimize files.
+	 * 
+	 * @param conversion {@link FileTypeConversion} used to tell if and how the
+	 *                   uploaded files should be converted from one type to 
+	 *                   another.
+	 * @param generateWebp If {@code true} then Webp versions of the images will
+	 *                     be created. If {@code false} then Webp versions of 
+	 *                     the images will not be created.
+	 * @param request The {@link MultipartHttpServletRequest} coming from the 
+	 *                client
+	 * @param response The {@link HttpServletResponse} going back to the client
+	 * @return The content being sent back to the client.
+	 */
 	@RequestMapping(value="upload", produces="application/json", method=RequestMethod.POST)
 	@ResponseStatus(value=HttpStatus.OK)
-	protected @ResponseBody Map<String, List<SimpleOptimizationResult>> upload(@RequestParam("conversion") final FileTypeConversion conversion, @RequestParam(value="webp", defaultValue="false") final boolean generateWebp, final MultipartHttpServletRequest request, final HttpServletResponse response) throws ImageFileOptimizationException {
+	protected @ResponseBody Map<String, List<SimpleOptimizationResult>> upload(@RequestParam("conversion") final FileTypeConversion conversion, @RequestParam(value="webp", defaultValue="false") final boolean generateWebp, final MultipartHttpServletRequest request, final HttpServletResponse response) {
 
 		final List<File> files = new ArrayList<File>();
 
@@ -157,13 +174,27 @@ public final class ImageFileController {
 		return file;
 	}
 	
+	/**
+	 * @return The root directory where all of the optimized images are 
+	 *         temporarily stored.
+	 */
 	public String getRootImageDirectory() {
 		return imageOptimizationService.getFinalResultsDirectory() + tmpDirPath;
 	}
 
+	/**
+	 * Externally exposed method for handling requests to download files.
+	 * 
+	 * @param id The id of the file to download
+	 * @param fileName The name of the file to download
+	 * @param response The {@link HttpServletResponse} going back to the client
+	 * @return The file being requested.
+	 * @throws OptimizedFileNotFoundException Thrown if the file being requested
+	 *                                        cannot be found.
+	 */
 	@RequestMapping(value="get/{id}/{fileName:.*}", method=RequestMethod.GET)
 	@ResponseBody
-	protected FileSystemResource download(@PathVariable final long id, @PathVariable final String fileName, final HttpServletResponse response) throws Exception {
+	protected FileSystemResource download(@PathVariable final long id, @PathVariable final String fileName, final HttpServletResponse response) throws OptimizedFileNotFoundException {
 		
 		if(!containsExtension(FilenameUtils.getExtension(fileName))) {
 			throw new OptimizedFileNotFoundException(fileName + " does not exist");

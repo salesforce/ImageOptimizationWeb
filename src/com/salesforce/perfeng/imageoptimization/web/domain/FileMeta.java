@@ -1,5 +1,10 @@
 package com.salesforce.perfeng.imageoptimization.web.domain;
 
+/**
+ * Meta data about the optimized file.
+ * 
+ * @author eperret (Eric Perret)
+ */
 public class FileMeta {
 		 
     private String fileName;
