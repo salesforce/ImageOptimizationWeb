@@ -8,7 +8,7 @@ Created by <span itemscope="" itemtype="http://schema.org/Person">
 
 ## Summary ##
 
-ImageOptimizationWeb is a web based version of the [ImageOptimization](https://git.soma.salesforce.com/perfeng/ImageOptimization) java batch code use to optimize images that are uploaded to it. It does the optimizations using a process is called [lossless compression](http://en.wikipedia.org/wiki/Image_compression#Lossy_and_lossless_compression).
+ImageOptimizationWeb is a web based version of the [ImageOptimization](https://github.com/salesforce/ImageOptimization) java batch code use to optimize images that are uploaded to it. It does the optimizations using a process is called [lossless compression](http://en.wikipedia.org/wiki/Image_compression#Lossy_and_lossless_compression).
 
 Apart from optimizing an image, it also supports a few other things
 * Converting image types, GIFs to PNGs, if it will make the image smaller.
@@ -18,11 +18,11 @@ When optimizaing or converting an image, depending on the size it will take whil
 
 ## Installation ##
 
-NOTE: Currently this code has only been tested on Linux due to [binary dependancies](https://git.soma.salesforce.com/perfeng/ImageOptimization/tree/master/lib/binary/linux) in the ImageOptimization project this code depends on.
+NOTE: Currently this code has only been tested on Linux due to binary dependancies in the ImageOptimization project this code depends on.
 
-See the Image Optimization [installation instructions](https://github.com/forcedotcom/ImageOptimization/blob/master/README.md#compilation) for the steps needed to download and compile the binaries.
+See the Image Optimization [installation instructions](https://github.com/salesforce/ImageOptimization/blob/master/README.md) for the steps needed to download and compile the binaries.
 
-The file system path of the image optimization binaries needs to set in the the [sping-servlet.xml](https://git.soma.salesforce.com/perfeng/ImageOptimizationWeb/blob/master/WebContent/WEB-INF/spring-servlet.xml) file as the constructor argument for the "imageOptimizationService" bean.
+The file system path of the image optimization binaries needs to set in the the [sping-servlet.xml](https://github.com/salesforce/ImageOptimizationWeb/blob/master/WebContent/WEB-INF/spring-servlet.xml) file as the constructor argument for the "imageOptimizationService" bean.
 
     <bean id="imageOptimizationService" class="com.salesforce.perfeng.uiperf.imageoptimization.service.ImageOptimizationService" factory-method="createInstance" destroy-method="destroy">
         <constructor-arg value="~/git/ImageOptimization/lib/binary/linux/"/>
@@ -32,4 +32,4 @@ You need to have JAVA JDK 7 on the machine for compiling and Maven 3. Then run `
 
 ## How to use ##
 
-To access the web app run `http://localhost/optimize/images/` from a modern browser to launch the web interface.  Currently it has only been tested on IE 10+ and Chrome.  Please file [bugs](https://github.com/forcedotcom/ImageOptimizationWeb/issues) if you find any issues with other browsers.
+To access the web app run `http://localhost/optimize/images/` from a modern browser to launch the web interface.  Currently it has only been tested on IE 10+ and Chrome.  Please file [bugs](https://github.com/salesforce/ImageOptimizationWeb/issues) if you find any issues with other browsers.
