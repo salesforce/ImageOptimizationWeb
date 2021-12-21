@@ -13,14 +13,14 @@ public class FileUploadForm {
 	private List<MultipartFile> files;
 
 	/**
-	 * @return the files
+	 * @return the files.
 	 */
 	public final List<MultipartFile> getFiles() {
 		return files;
 	}
 
 	/**
-	 * @param files the files to set
+	 * @param files the files to set.
 	 */
 	public final void setFiles(List<MultipartFile> files) {
 		this.files = files;

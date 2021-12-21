@@ -1,13 +1,10 @@
 package com.salesforce.perfeng.imageoptimization.web.domain;
 
-import org.apache.http.annotation.Immutable;
-
 /**
- * Holds the results of optimizing an image.
+ * Holds the results of optimizing an image. This class is threadsafe.
  * 
  * @author eperret (Eric perret)
  */
-@Immutable
 public class SimpleOptimizationResult {
 	private final long size;
 	private final long savings;
@@ -30,35 +27,35 @@ public class SimpleOptimizationResult {
 	}
 
 	/**
-	 * @return the size
+	 * @return the size.
 	 */
 	public final long getSize() {
 		return size;
 	}
 
 	/**
-	 * @return the savings
+	 * @return the savings.
 	 */
 	public final long getSavings() {
 		return savings;
 	}
 
 	/**
-	 * @return the id
+	 * @return the id.
 	 */
 	public final String getId() {
 		return id;
 	}
 
 	/**
-	 * @return the file
+	 * @return the file.
 	 */
 	public final String getFile() {
 		return file;
 	}
 	
 	/**
-	 * @return the errorMsg
+	 * @return the errorMsg.
 	 */
 	public String getErrorMsg() {
 		return errorMsg;
