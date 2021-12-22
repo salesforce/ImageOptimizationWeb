@@ -35,7 +35,7 @@ import com.salesforce.perfeng.uiperf.imageoptimization.service.IImageOptimizatio
 import com.salesforce.perfeng.uiperf.imageoptimization.service.IImageOptimizationService.FileTypeConversion;
 
 /**
- * Main controller for handling the optimization of images
+ * Main controller for handling the optimization of images.
  * 
  * @author eperret (Eric Perret)
  */
@@ -47,7 +47,7 @@ public final class ImageFileController {
 	private final String tmpDirPath;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 * 
 	 * @param imageOptimizationService The service used to optimize the images
 	 * @throws IOException Thrown if there is an issue creating the temp 
